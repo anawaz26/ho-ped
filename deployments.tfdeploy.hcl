@@ -27,7 +27,7 @@ deployment "sandbox" {
     region         = "eu-west-2"
     aws_account_id = "735910966814"
     environment    = "sandbox"
-    role_arn       = "arn:aws:iam::735910966814:role/hcp-terraform-stack-role"
+    role_arn       = "arn:aws:iam::735910966814:role/ayazi-terrastack"
     identity_token = identity_token.aws.jwt
 
     bastion_key_name  = "ped-bastion-sandbox"
@@ -67,7 +67,7 @@ deployment "sandbox" {
 #     region         = "eu-west-2"
 #     aws_account_id = "735910966814"
 #     environment    = "production-blue"
-#     role_arn       = "arn:aws:iam::735910966814:role/hcp-terraform-stack-role"
+#     role_arn       = "arn:aws:iam::735910966814:role/ayazi-terrastack"
 #     identity_token = identity_token.aws.jwt
 #     bastion_key_name  = "ped-bastion-prod"
 #     encircle_vpn_cidr = "35.176.38.251/32"
@@ -88,7 +88,7 @@ deployment "sandbox" {
 #     region         = "eu-west-2"
 #     aws_account_id = "735910966814"
 #     environment    = "production-green"
-#     role_arn       = "arn:aws:iam::735910966814:role/hcp-terraform-stack-role"
+#     role_arn       = "arn:aws:iam::735910966814:role/ayazi-terrastack"
 #     identity_token = identity_token.aws.jwt
 #     bastion_key_name  = "ped-bastion-prod"
 #     encircle_vpn_cidr = "35.176.38.251/32"
