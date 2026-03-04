@@ -36,7 +36,7 @@ deployment "sandbox" {
 
     aws_account_id = "735910966814"
     environment = "sandbox"
-    role_arn   = "arn:aws:iam::${var.aws_account_id}:role/hcp-terraform-stack-role"
+    role_arn   = "arn:aws:iam::735910966814:role/hcp-terraform-stack-role"
 
     bastion_key_name     = "ped-bastion-sandbox"
     encircle_vpn_cidr    = "35.176.38.251/32" # Encircle VPN egress IP
@@ -74,7 +74,7 @@ deployment "production-blue" {
 
     aws_account_id = "735910966814"
     environment = "production-blue"
-    role_arn   = "arn:aws:iam::${var.aws_account_id}:role/hcp-terraform-stack-role"
+    role_arn   = "arn:aws:iam::735910966814:role/hcp-terraform-stack-role"
 
     bastion_key_name     = "ped-bastion-prod"
     encircle_vpn_cidr    = "35.176.38.251/32"
@@ -112,7 +112,7 @@ deployment "production-green" {
 
     aws_account_id = "735910966814"
     environment = "production-green"
-    role_arn   = "arn:aws:iam::${var.aws_account_id}:role/hcp-terraform-stack-role"
+    role_arn   = "arn:aws:iam::735910966814:role/hcp-terraform-stack-role"
 
     bastion_key_name     = "ped-bastion-prod"
     encircle_vpn_cidr    = "35.176.38.251/32"
