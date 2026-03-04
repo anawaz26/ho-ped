@@ -15,7 +15,7 @@ identity_token "aws" {
 # Create a variable set in HCP Terraform with a "db_password" variable,
 # then replace the ID below with the actual variable set ID.
 store "varset" "secrets" {
-  id       = "REPLACE_WITH_VARSET_ID"
+  id       = "varset-Qi9nLJQKffnp9Vhf"
   category = "terraform"
 }
 
