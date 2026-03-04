@@ -49,13 +49,13 @@ variable "cloudflare_ip_ranges" {
   description = "Cloudflare published IPv4 egress ranges. DMZ SG restricts HTTPS ingress to these only."
 }
 
-# RDS MariaDB admin password - must be sourced from HCP Terraform variable set (sensitive)
-# STRIDE R8 - credentials must not be stored in plaintext or version control
+# RDS MariaDB admin password - must be sourced from Terraform Cloud workspace as a sensitive variable
+# ISO27001 A.9.4.3 / OWASP: credentials must never be stored in plaintext or version control (STRIDE R8)
+# Set this value only in the Terraform Cloud workspace variable set, marked as sensitive. Never commit to source control.
 variable "db_password" {
+  description = "Database admin password (set securely as sensitive variable in Terraform Cloud workspace; never check in to source control)"
   type        = string
   sensitive   = true
-  ephemeral   = true
-  description = "RDS MariaDB admin password. Must be set as a sensitive variable in HCP Terraform. Never commit to source control."
 }
 
 # Email address for CloudWatch alarm notifications (HLD §6.1 Alerting Strategy)
