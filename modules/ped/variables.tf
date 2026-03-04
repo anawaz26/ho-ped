@@ -54,6 +54,7 @@ variable "cloudflare_ip_ranges" {
 variable "db_password" {
   type        = string
   sensitive   = true
+  ephemeral   = true
   description = "RDS MariaDB admin password. Must be set as a sensitive variable in HCP Terraform. Never commit to source control."
 }
 

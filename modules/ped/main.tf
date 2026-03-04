@@ -451,7 +451,8 @@ resource "aws_db_instance" "main" {
   kms_key_id              = aws_kms_key.main.arn
   db_name                 = "ped"
   username                = "ped_admin"
-  password                = var.db_password
+  password_wo             = var.db_password
+  password_wo_version     = 1
   db_subnet_group_name    = aws_db_subnet_group.main.name
   vpc_security_group_ids  = [aws_security_group.rds_sg.id]
   multi_az                = true  # Automatic failover to standby AZ (HLD §5.10.2)
