@@ -54,6 +54,7 @@ variable "cloudflare_ip_ranges" {
 variable "db_password" {
   type        = string
   sensitive   = true
+  ephemeral   = true
   description = "RDS MariaDB admin password. Must be set as a sensitive variable in HCP Terraform. Never commit to source control."
 }
 
@@ -68,5 +69,6 @@ variable "ops_alert_email" {
 variable "identity_token" {
   type        = string
   sensitive   = true
+  ephemeral   = true
   description = "JWT token for OIDC authentication with AWS. Passed from identity_token block in tfdeploy."
 }
