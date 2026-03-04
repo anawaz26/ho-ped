@@ -34,7 +34,19 @@ deployment_auto_approve "safe_changes" {
   }
 }
 
-deployment_group "safe_changes_group" {
+deployment_group "sandbox_group" {
+  auto_approve_checks = [
+    deployment_auto_approve.safe_changes
+  ]
+}
+
+deployment_group "production_blue_group" {
+  auto_approve_checks = [
+    deployment_auto_approve.safe_changes
+  ]
+}
+
+deployment_group "production_green_group" {
   auto_approve_checks = [
     deployment_auto_approve.safe_changes
   ]
@@ -44,7 +56,7 @@ deployment_group "safe_changes_group" {
 # Encircle development environment. Reduced spec; not Multi-AZ.
 # HLD §5.11.1 - for feature development and integration testing.
 deployment "sandbox" {
-  deployment_group = deployment_group.safe_changes_group
+  deployment_group = deployment_group.sandbox_group
   inputs = {
     region         = "eu-west-2"
     aws_account_id = "735910966814"
@@ -82,7 +94,7 @@ deployment "sandbox" {
 # The active production environment serving all user traffic via Cloudflare.
 # HLD §5.3 - Blue is the live environment until a deployment flip is executed.
 deployment "production-blue" {
-  deployment_group = deployment_group.safe_changes_group
+  deployment_group = deployment_group.production_blue_group
   inputs = {
     region         = "eu-west-2"
     aws_account_id = "735910966814"
@@ -120,7 +132,7 @@ deployment "production-blue" {
 # is flipped via Cloudflare within a 30-minute window (HLD §5.3.2 / §5.11.3.1).
 # After a successful flip, Green becomes live and Blue becomes standby.
 deployment "production-green" {
-  deployment_group = deployment_group.safe_changes_group
+  deployment_group = deployment_group.production_green_group
   inputs = {
     region         = "eu-west-2"
     aws_account_id = "735910966814"
