@@ -3,11 +3,27 @@
 # HLD-PPE-2026-001 | Blue/Green model (HLD §5.3.1 / §5.11.3)
 # ============================================================
 
+# --- OIDC IDENTITY TOKEN (GA format - defined in tfdeploy.hcl) ---
+# Generates a JWT for each deployment, used by the AWS provider to
+# assume the stack role via OIDC workload identity (no long-lived keys).
+identity_token "aws" {
+  audience = ["aws.workload.identity"]
+}
+
+# --- VARIABLE SET: SECRETS ---
+# Links to an HCP Terraform variable set containing sensitive values.
+# Create a variable set in HCP Terraform with a "db_password" variable,
+# then replace the ID below with the actual variable set ID.
+store "varset" "secrets" {
+  id       = "REPLACE_WITH_VARSET_ID"
+  category = "terraform"
+}
+
 # --- AUTO-APPROVE ORCHESTRATION RULE ---
 # Block auto-approval if plan contains errors or any resource deletions.
 # All destructive changes require manual review by an authorised Encircle operator.
 deployment_auto_approve "safe_changes" {
-check {
+  check {
     condition = context.plan.applyable
     reason    = "Plan is not in an applyable state (errors occurred)."
   }
@@ -18,13 +34,11 @@ check {
   }
 }
 
-
 deployment_group "safe_changes_group" {
   auto_approve_checks = [
     deployment_auto_approve.safe_changes
   ]
 }
-
 
 # --- SANDBOX / DEVELOPMENT ---
 # Encircle development environment. Reduced spec; not Multi-AZ.
@@ -32,15 +46,15 @@ deployment_group "safe_changes_group" {
 deployment "sandbox" {
   deployment_group = deployment_group.safe_changes_group
   inputs = {
-    region     = "eu-west-2"
-
+    region         = "eu-west-2"
     aws_account_id = "735910966814"
-    environment = "sandbox"
-    role_arn   = "arn:aws:iam::735910966814:role/hcp-terraform-stack-role"
+    environment    = "sandbox"
+    role_arn       = "arn:aws:iam::735910966814:role/hcp-terraform-stack-role"
+    identity_token = identity_token.aws.jwt
 
-    bastion_key_name     = "ped-bastion-sandbox"
-    encircle_vpn_cidr    = "35.176.38.251/32" # Encircle VPN egress IP
-    db_password          = var.db_password           # Sourced from HCP Terraform variable set (sensitive)
+    bastion_key_name  = "ped-bastion-sandbox"
+    encircle_vpn_cidr = "35.176.38.251/32" # Encircle VPN egress IP
+    db_password       = store.varset.secrets.db_password
 
     # Cloudflare published IPv4 ranges - https://www.cloudflare.com/ips-v4
     cloudflare_ip_ranges = [
@@ -70,15 +84,15 @@ deployment "sandbox" {
 deployment "production-blue" {
   deployment_group = deployment_group.safe_changes_group
   inputs = {
-    region      = "eu-west-2"
-
+    region         = "eu-west-2"
     aws_account_id = "735910966814"
-    environment = "production-blue"
-    role_arn   = "arn:aws:iam::735910966814:role/hcp-terraform-stack-role"
+    environment    = "production-blue"
+    role_arn       = "arn:aws:iam::735910966814:role/hcp-terraform-stack-role"
+    identity_token = identity_token.aws.jwt
 
-    bastion_key_name     = "ped-bastion-prod"
-    encircle_vpn_cidr    = "35.176.38.251/32"
-    db_password          = var.db_password
+    bastion_key_name  = "ped-bastion-prod"
+    encircle_vpn_cidr = "35.176.38.251/32"
+    db_password       = store.varset.secrets.db_password
 
     cloudflare_ip_ranges = [
       "173.245.48.0/20",
@@ -108,15 +122,15 @@ deployment "production-blue" {
 deployment "production-green" {
   deployment_group = deployment_group.safe_changes_group
   inputs = {
-    region      = "eu-west-2"
-
+    region         = "eu-west-2"
     aws_account_id = "735910966814"
-    environment = "production-green"
-    role_arn   = "arn:aws:iam::735910966814:role/hcp-terraform-stack-role"
+    environment    = "production-green"
+    role_arn       = "arn:aws:iam::735910966814:role/hcp-terraform-stack-role"
+    identity_token = identity_token.aws.jwt
 
-    bastion_key_name     = "ped-bastion-prod"
-    encircle_vpn_cidr    = "35.176.38.251/32"
-    db_password          = var.db_password
+    bastion_key_name  = "ped-bastion-prod"
+    encircle_vpn_cidr = "35.176.38.251/32"
+    db_password       = store.varset.secrets.db_password
 
     cloudflare_ip_ranges = [
       "173.245.48.0/20",

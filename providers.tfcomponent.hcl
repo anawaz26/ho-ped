@@ -3,13 +3,9 @@ provider "aws" "this" {
     region = var.region
     assume_role_with_web_identity {
       role_arn           = var.role_arn
-      web_identity_token = identity_token.aws.jwt
+      web_identity_token = var.identity_token
     }
   }
-}
-
-identity_token "aws" {
-  audience = ["aws.workload.identity"]
 }
 
 required_providers {

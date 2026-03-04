@@ -63,3 +63,10 @@ variable "ops_alert_email" {
   type        = string
   description = "Ops team email address for CloudWatch alarm notifications via SNS."
 }
+
+# OIDC identity token JWT - passed from deployment block's identity_token reference
+variable "identity_token" {
+  type        = string
+  sensitive   = true
+  description = "JWT token for OIDC authentication with AWS. Passed from identity_token block in tfdeploy."
+}
