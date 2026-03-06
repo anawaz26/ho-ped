@@ -1,1 +1,8 @@
-# All resources removed to trigger full stack destruction.
+removed {
+  source = "./modules/ped"
+  from   = component.ped
+
+  providers = {
+    aws = provider.aws.this
+  }
+}
